@@ -3,6 +3,16 @@ from sqlalchemy.orm import Session
 from typing import List
 import database
 
+from pydantic import BaseModel
+
+# Blueprint for creating a new book
+class BookCreate(BaseModel):
+    isbn: str
+    title: str
+    author: str
+    year: int
+    publisher: str
+
 app = FastAPI(title="Book Discovery API")
 
 # Dependency to get the database session
@@ -33,3 +43,19 @@ def get_books(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
             "average_rating": b.average_rating
         } for b in books
     ]
+
+@app.post("/books", status_code=201)
+def create_book(book: BookCreate, db: Session = Depends(get_db)):
+    # Create the database object
+    new_book = database.Book(
+        isbn=book.isbn,
+        title=book.title,
+        author=book.author,
+        year=book.year,
+        publisher=book.publisher,
+        average_rating=0.0  # New books start with no rating
+    )
+    db.add(new_book)
+    db.commit()
+    db.refresh(new_book)
+    return new_book
