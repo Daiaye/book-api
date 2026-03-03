@@ -13,6 +13,13 @@ class BookCreate(BaseModel):
     year: int
     publisher: str
 
+# Blueprint for updating an existing book
+class BookUpdate(BaseModel):
+    title: str = None
+    author: str = None
+    year: int = None
+    publisher: str = None
+
 app = FastAPI(title="Book Discovery API")
 
 # Dependency to get the database session
@@ -59,3 +66,22 @@ def create_book(book: BookCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_book)
     return new_book
+
+@app.put("/books/{book_id}")
+def update_book(book_id: int, book_update: BookUpdate, db: Session = Depends(get_db)):
+    # Find the book in the database
+    db_book = db.query(database.Book).filter(database.Book.id == book_id).first()
+    
+    # If it doesn't exist, tell the user
+    if not db_book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    
+    # Update the fields if they were provided
+    if book_update.title: db_book.title = book_update.title
+    if book_update.author: db_book.author = book_update.author
+    if book_update.year: db_book.year = book_update.year
+    if book_update.publisher: db_book.publisher = book_update.publisher
+    
+    db.commit()
+    db.refresh(db_book)
+    return db_book
