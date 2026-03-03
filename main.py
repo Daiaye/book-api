@@ -51,6 +51,13 @@ def get_books(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
         } for b in books
     ]
 
+@app.get("/books/{book_id}")
+def get_single_book(book_id: int, db: Session = Depends(get_db)):
+    book = db.query(database.Book).filter(database.Book.id == book_id).first()
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    return book
+
 @app.post("/books", status_code=201)
 def create_book(book: BookCreate, db: Session = Depends(get_db)):
     # Create the database object
