@@ -61,7 +61,8 @@ def get_single_book(book_id: int, db: Session = Depends(get_db)):
 
 @app.get("/books/search/")
 def search_books(
-    query: str = None, 
+    title: str = None, 
+    author: str = None,
     year: int = None, 
     publisher: str = None,
     min_rating: float = 0.0,
@@ -69,22 +70,18 @@ def search_books(
 ):
     search = db.query(database.Book)
 
-    # If a text query is provided, search Title OR Author
-    if query:
-        search = search.filter(
-            (database.Book.title.contains(query)) | 
-            (database.Book.author.contains(query))
-        )
+    if title:
+        search = search.filter(database.Book.title.contains(title))
     
-    # If a year is provided, filter by that exact year
+    if author:
+        search = search.filter(database.Book.author.contains(author))
+    
     if year:
         search = search.filter(database.Book.year == year)
         
-    # If a publisher is provided, filter by that
     if publisher:
         search = search.filter(database.Book.publisher.contains(publisher))
 
-    # Always filter by the minimum rating (defaults to 0.0)
     search = search.filter(database.Book.average_rating >= min_rating)
 
     results = search.all()
