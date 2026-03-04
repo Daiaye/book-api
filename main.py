@@ -51,6 +51,7 @@ def get_books(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
         } for b in books
     ]
 
+# Endpoint to get a specific book
 @app.get("/books/{book_id}")
 def get_single_book(book_id: int, db: Session = Depends(get_db)):
     book = db.query(database.Book).filter(database.Book.id == book_id).first()
@@ -92,3 +93,14 @@ def update_book(book_id: int, book_update: BookUpdate, db: Session = Depends(get
     db.commit()
     db.refresh(db_book)
     return db_book
+
+@app.delete("/books/book_id", status_code=204)
+def delete_book(book_id: int, db: Session = Depends(get_db)):
+    db_book = db.query(database.Book).filter(database.Book.id == book_id).first()
+
+    if not db_book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    
+    db.delete(db_book)
+    db.commit()
+    return None # 204 means no content will be returned
