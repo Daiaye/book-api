@@ -40,7 +40,15 @@ pip install -r requirements.txt
 ```
 
 ### **4. Add csv files to the project**
-Create a folder called 'data' and paste the csv files in here.
+Create a folder called `data` in the root directory and paste the downloaded CSV files inside it.
+
+```
+BOOK-API/
+├── data/
+│   ├── books.csv
+│   ├── ratings.csv
+│   └── users.csv
+```
 
 ### **5. Create the database**
 ```bash
