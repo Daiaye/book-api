@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List
 import database
@@ -36,7 +36,11 @@ def read_root():
 
 # Endpoint to get a list of books
 @app.get("/books", response_model=List[dict])
-def get_books(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def get_books(
+    skip: int = Query(0, description="The number of records to bypass from the start of the list."),
+    limit: int = Query(10, description="The maximum number of records to return in this request."),
+    db: Session = Depends(get_db)
+):
     books = db.query(database.Book).offset(skip).limit(limit).all()
     # Convert SQLAlchemy objects to simple dictionaries
     return [
