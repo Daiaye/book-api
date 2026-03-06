@@ -17,6 +17,7 @@ Ensure you have **Python 3.10+** installed on your machine.
 
 ### **2. Environment Setup**
 Create and activate a virtual environment to isolate project dependencies:
+
 Create the environment
 ```bash
 python -m venv .venv
