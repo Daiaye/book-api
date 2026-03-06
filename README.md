@@ -17,14 +17,18 @@ Ensure you have **Python 3.10+** installed on your machine.
 
 ### **2. Environment Setup**
 Create and activate a virtual environment to isolate project dependencies:
+Create the environment
 ```bash
-# Create the environment
 python -m venv .venv
+```
 
-# Activate (Windows)
+Activate (Windows)
+```bash
 .\.venv\Scripts\activate
+```
 
-# Activate (Mac/Linux)
+Activate (Mac/Linux)
+```bash
 source .venv/bin/activate
 ```
 
@@ -34,17 +38,20 @@ This project uses several libraries for the API and database management. Install
 pip install -r requirements.txt
 ```
 
-### **4. Create the database**
+### **4. Add csv files to the project**
+Create a folder called 'data' and paste the csv files in here.
+
+### **5. Create the database**
 ```bash
 python database.py
 ```
 
-### **5. Import the records**
+### **6. Import the records**
 ```bash
 python import_data.py
 ```
 
-### **6. Launch the API**
+### **7. Launch the API**
 ```bash
 uvicorn main:app --reload
 ```
