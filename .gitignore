@@ -1,3 +1,9 @@
 *.csv
 *.db
 __pycache__/
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
