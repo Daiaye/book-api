@@ -68,3 +68,4 @@ uvicorn main:app --reload
 ## API Access and Documentation
 * Base URL: http://127.0.0.1:8000
 * Interactive Documentation: http://127.0.0.1:8000/docs
+* PDF Version located in 'docs' folder
